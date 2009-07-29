@@ -1,6 +1,8 @@
-tokyooo (pronounced toke-ee-yoooo!): c++/oo tokyo api
+tokyooo (pronounced toke-ee-yoooo!): c++/oo tokyo cabinet api
 
-just the bare bones to do rdb stuff against a tyrant server.
+tokyo cabinet is http://tokyocabinet.sourceforge.net/ and it rocks
+
+this is just the bare bones to do rdb stuff against a tyrant server.
 
 TODO:
 
