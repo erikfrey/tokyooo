@@ -8,17 +8,25 @@ using namespace tokyooo;
 
 int main(int argc, char * argv[])
 {
-  map m;
+  rdb r("localhost", 1978);
 
-  m.put( 3, "pooppppp" );
+  map row;
+  row.put("xy", "10"); r.tbl_put(1, row);
+  row.put("xy", "20"); r.tbl_put(2, row);
+  row.put("xy", "-500"); r.tbl_put(3, row);
+  row.put("xy", "95671"); r.tbl_put(4, row);
 
-  std::string ret;
+  list keys;
 
-  m.get(3, ret);
+  query q(r);
 
-  std::cout << ret << std::endl;
+  q.cond("xy", query::num_greater, "0").order("xy", query::num_desc).limit(10, 0).search_keys(keys);
 
-  list l;
+  std::cout << q.hint() << std::endl;
 
-  l.push(3);
+  int x;
+  for (int i = 0; keys.get(x, i); ++i )
+    std::cout << x << std::endl;
+
+
 }

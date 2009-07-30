@@ -108,7 +108,7 @@ public:
   bool shift(Value & value)
   {
     int size = 0;
-    const void * p = tclistshift( list_, &size );
+    void * p = tclistshift( list_, &size );
     if (p == NULL)
       return false;
     ser::assign(value, p);

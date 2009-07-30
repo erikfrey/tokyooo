@@ -65,14 +65,16 @@ public:
     return *this;
   }
 
-  void order(const std::string & name, order_e order)
+  query & order(const std::string & name, order_e order)
   {
     tcrdbqrysetorder(qry_, name.c_str(), order);
+    return * this;
   }
 
-  void limit(int max, int skip)
+  query & limit(int max, int skip)
   {
     tcrdbqrysetlimit(qry_, max, skip);
+    return *this;
   }
 
   void search_keys( list & keys )

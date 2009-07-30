@@ -35,8 +35,8 @@ struct ser
   static const void * cptr(const std::string & value) { return value.c_str(); }
   static const void * cptr(const char * value) { return value; }
   template<class T> static const void * cptr(const T & value) { return &value; }
-  static int len(const std::string & value) { return value.size() + 1; }
-  static int len(const char * value) { return strlen(value) + 1; }
+  static int len(const std::string & value) { return value.size(); }
+  static int len(const char * value) { return strlen(value); }
   template<class T> static int len(const T & value) { return sizeof(T); }
   static void assign(std::string & value, const void * p) { value = reinterpret_cast<const char *>(p); }
   template<class T> static void assign(T & value, const void * p) { value = *reinterpret_cast<const T*>(p); }

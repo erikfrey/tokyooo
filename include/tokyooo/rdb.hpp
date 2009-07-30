@@ -207,9 +207,9 @@ public:
   {
     switch (mode)
     {
-    case store: tcrdbtblput(rdb_, ser::cptr(key), ser::len(key), row) || err(rdb_); break;
-    case keep: tcrdbtblputkeep(rdb_, ser::cptr(key), ser::len(key), row) || err(rdb_); break;
-    case cat: tcrdbtblputcat(rdb_, ser::cptr(key), ser::len(key), row) || err(rdb_); break;
+    case store: tcrdbtblput(rdb_, ser::cptr(key), ser::len(key), row.native() ) || err(rdb_); break;
+    case keep: tcrdbtblputkeep(rdb_, ser::cptr(key), ser::len(key), row.native() ) || err(rdb_); break;
+    case cat: tcrdbtblputcat(rdb_, ser::cptr(key), ser::len(key), row.native() ) || err(rdb_); break;
     default: err("expardon me?"); break;
     }
   }
