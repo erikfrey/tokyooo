@@ -18,17 +18,20 @@ enum put_mode_e
   nr,     // store a record without response from the server
 };
 
-bool err(TCRDB * rdb)
+struct err
 {
-  throw std::runtime_error( tcrdberrmsg( tcrdbecode ( rdb ) ) );
-  return true;
-}
+  static bool go(TCRDB * rdb)
+  {
+    throw std::runtime_error( tcrdberrmsg( tcrdbecode ( rdb ) ) );
+    return true;
+  }
 
-bool err(const std::string & e)
-{
-  throw std::runtime_error( e.c_str() );
-  return true;
-}
+  static bool go(const std::string & e)
+  {
+    throw std::runtime_error( e.c_str() );
+    return true;
+  }
+};
 
 struct ser
 {

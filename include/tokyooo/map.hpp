@@ -51,7 +51,7 @@ public:
     case store: tcmapput(map_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)); break;
     case keep: tcmapputkeep(map_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)); break;
     case cat: tcmapputcat(map_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)); break;
-    default: err("expardon me?"); break;
+    default: err::go("expardon me?"); break;
     }
   }
 

@@ -64,12 +64,12 @@ public:
   void open(const std::string & host, int port, double timeout = 0, open_options_e options = open_default)
   {
     tcrdbtune(rdb_, timeout, options );
-    tcrdbopen(rdb_, host.c_str(), port) || err(rdb_);
+    tcrdbopen(rdb_, host.c_str(), port) || err::go(rdb_);
   }
 
   void close()
   {
-    tcrdbclose(rdb_) || err(rdb_);
+    tcrdbclose(rdb_) || err::go(rdb_);
   }
 
   // using this for structs and stuff - maybe alignment problems?  ymmv
@@ -78,19 +78,19 @@ public:
   {
     switch (put_mode)
     {
-    case store: tcrdbput(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)) || err(rdb_); break;
-    case keep: tcrdbputkeep(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)) || err(rdb_); break;
-    case cat: tcrdbputcat(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)) || err(rdb_); break;
-    case shl: tcrdbputshl(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value), width) || err(rdb_); break;
-    case nr: tcrdbputnr(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)) || err(rdb_); break;
-    default: err("expardon me?"); break;
+    case store: tcrdbput(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)) || err::go(rdb_); break;
+    case keep: tcrdbputkeep(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)) || err::go(rdb_); break;
+    case cat: tcrdbputcat(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)) || err::go(rdb_); break;
+    case shl: tcrdbputshl(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value), width) || err::go(rdb_); break;
+    case nr: tcrdbputnr(rdb_, ser::cptr(key), ser::len(key), ser::cptr(value), ser::len(value)) || err::go(rdb_); break;
+    default: err::go("expardon me?"); break;
     }
   }
 
   template<class Key>
   void out(const Key & key)
   {
-    tcrdbout(rdb_, ser::cptr(key), ser::len(key)) || err(rdb_);
+    tcrdbout(rdb_, ser::cptr(key), ser::len(key)) || err::go(rdb_);
   }
 
   template<class Key, class Value>
@@ -107,14 +107,14 @@ public:
 
   void get(map & m)
   {
-    tcrdbget3(rdb_, m.native()) || err(rdb_);
+    tcrdbget3(rdb_, m.native()) || err::go(rdb_);
   }
 
   template<class Key>
   int vsize(const Key & key)
   {
     int ret_val = tcrdbvsiz( rdb_, ser::cptr(key), ser::len(key) );
-    (ret_val != -1) || err(rdb_);
+    (ret_val != -1) || err::go(rdb_);
     return ret_val;
   }
 
@@ -124,7 +124,7 @@ public:
   int add(const Key & key, int value)
   {
     int ret_val = tcrdbaddint(rdb_, ser::cptr(key), ser::len(key), value);
-    ( ret_val == std::numeric_limits<int>::min() ) || err(rdb_);
+    ( ret_val == std::numeric_limits<int>::min() ) || err::go(rdb_);
     return ret_val;
   }
 
@@ -132,7 +132,7 @@ public:
   int add(const Key & key, double value)
   {
     double ret_val = tcrdbadddouble(rdb_, ser::cptr(key), ser::len(key), value);
-    !std::isnan(ret_val) || err(rdb_);
+    !std::isnan(ret_val) || err::go(rdb_);
     return ret_val;
   }
 
@@ -143,42 +143,42 @@ public:
     int size = 0;
     void * p = tcrdbext( rdb_, name.c_str(), options, ser::cptr(key), ser::len(key), ser::cptr(value),
         ser::len(value), &size );
-    p || err(rdb_);
+    p || err::go(rdb_);
     ser::assign(value, p);
     std::free(p);
   }
 
   void sync()
   {
-    tcrdbsync(rdb_) || err(rdb_);
+    tcrdbsync(rdb_) || err::go(rdb_);
   }
 
   void optimize(const std::string & params = "")
   {
     if (params.empty())
-      tcrdboptimize(rdb_, NULL) || err(rdb_);
+      tcrdboptimize(rdb_, NULL) || err::go(rdb_);
     else
-      tcrdboptimize(rdb_, params.c_str()) || err(rdb_);
+      tcrdboptimize(rdb_, params.c_str()) || err::go(rdb_);
   }
 
   void vanish()
   {
-    tcrdbvanish(rdb_) || err(rdb_);
+    tcrdbvanish(rdb_) || err::go(rdb_);
   }
 
   void copy(const std::string & path)
   {
-    tcrdbcopy(rdb_, path.c_str()) || err(rdb_);
+    tcrdbcopy(rdb_, path.c_str()) || err::go(rdb_);
   }
 
   void restore(const std::string & path, size_type timestamp, restore_options_e options = restore_default )
   {
-    tcrdbrestore(rdb_, path.c_str(), timestamp, options) || err(rdb_);
+    tcrdbrestore(rdb_, path.c_str(), timestamp, options) || err::go(rdb_);
   }
 
   void set_master(const std::string & host, int port, size_type timestamp, restore_options_e options = restore_default)
   {
-    tcrdbsetmst(rdb_, host.c_str(), port, timestamp, options) || err(rdb_);
+    tcrdbsetmst(rdb_, host.c_str(), port, timestamp, options) || err::go(rdb_);
   }
 
   size_type size()
@@ -195,7 +195,7 @@ public:
   {
     std::string ret_val;
     char * p = tcrdbstat(rdb_);
-    p || err(rdb_);
+    p || err::go(rdb_);
     ret_val = p;
     std::free(p);
     return ret_val;
@@ -207,17 +207,17 @@ public:
   {
     switch (mode)
     {
-    case store: tcrdbtblput(rdb_, ser::cptr(key), ser::len(key), row.native() ) || err(rdb_); break;
-    case keep: tcrdbtblputkeep(rdb_, ser::cptr(key), ser::len(key), row.native() ) || err(rdb_); break;
-    case cat: tcrdbtblputcat(rdb_, ser::cptr(key), ser::len(key), row.native() ) || err(rdb_); break;
-    default: err("expardon me?"); break;
+    case store: tcrdbtblput(rdb_, ser::cptr(key), ser::len(key), row.native() ) || err::go(rdb_); break;
+    case keep: tcrdbtblputkeep(rdb_, ser::cptr(key), ser::len(key), row.native() ) || err::go(rdb_); break;
+    case cat: tcrdbtblputcat(rdb_, ser::cptr(key), ser::len(key), row.native() ) || err::go(rdb_); break;
+    default: err::go("expardon me?"); break;
     }
   }
 
   template<class Key>
   void tbl_out(const Key & key)
   {
-    tcrdbtblout(rdb_, ser::cptr(key), ser::len(key)) || err(rdb_);
+    tcrdbtblout(rdb_, ser::cptr(key), ser::len(key)) || err::go(rdb_);
   }
 
   template<class Key>
@@ -232,7 +232,7 @@ public:
 
   void set_index( const std::string & name, index_options_e options )
   {
-    tcrdbtblsetindex(rdb_, name.c_str(), options) || err(rdb_);
+    tcrdbtblsetindex(rdb_, name.c_str(), options) || err::go(rdb_);
   }
 
   uid genuid()

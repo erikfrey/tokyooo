@@ -12,15 +12,15 @@ int main(int argc, char * argv[])
 
   map row;
   row.put("xy", "10"); r.tbl_put(1, row);
-  row.put("xy", "20"); r.tbl_put(2, row);
-  row.put("xy", "-500"); r.tbl_put(3, row);
+  row.put("xy", "20 20"); r.tbl_put(2, row);
+  row.put("xy", "-500 20"); r.tbl_put(3, row);
   row.put("xy", "95671"); r.tbl_put(4, row);
 
   list keys;
 
   query q(r);
 
-  q.cond("xy", query::num_greater, "0").order("xy", query::num_desc).limit(10, 0).search_keys(keys);
+  q.cond("xy", query::str_has_some, "20").order("xy", query::str_desc).limit(10, 0).search_keys(keys);
 
   std::cout << q.hint() << std::endl;
 

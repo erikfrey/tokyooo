@@ -80,20 +80,20 @@ public:
   void search_keys( list & keys )
   {
     list tmp( tcrdbqrysearch(qry_) );
-    tmp.native() || err(rdb_);
+    tmp.native() || err::go(rdb_);
     keys.swap(tmp);
   }
 
   void search_rows( list & rows )
   {
     list tmp( tcrdbqrysearchget(qry_) );
-    tmp.native() || err(rdb_);
+    tmp.native() || err::go(rdb_);
     rows.swap(tmp);
   }
 
   void out()
   {
-    tcrdbqrysearchout(qry_) || err(rdb_);
+    tcrdbqrysearchout(qry_) || err::go(rdb_);
   }
 
   int count()
