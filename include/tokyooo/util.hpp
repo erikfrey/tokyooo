@@ -2,6 +2,7 @@
 #define __TOKYOPP_UTIL_HPP__
 
 #include <tcrdb.h>
+#include <tchdb.h>
 #include <string>
 #include <cstring>
 #include <stdexcept>
@@ -11,11 +12,12 @@ namespace tokyooo {
 
 enum put_mode_e
 {
-  store,    // store a record
+  store,  // store a record
   keep,   // store a new record
   cat,    // concatenate a value at the end of the existing record
   shl,    // concatenate a value at the end of the existing record and shift it to the left
   nr,     // store a record without response from the server
+  async,  // store in an asynchronous fashion
 };
 
 struct err
@@ -23,6 +25,12 @@ struct err
   static bool go(TCRDB * rdb)
   {
     throw std::runtime_error( tcrdberrmsg( tcrdbecode ( rdb ) ) );
+    return true;
+  }
+
+  static bool go(TCHDB * rdb)
+  {
+    throw std::runtime_error( tchdberrmsg( tchdbecode ( rdb ) ) );
     return true;
   }
 

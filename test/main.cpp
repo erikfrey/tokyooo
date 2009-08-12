@@ -1,6 +1,7 @@
 #include <iostream>
 #include <tokyooo/map.hpp>
 #include <tokyooo/rdb.hpp>
+#include <tokyooo/hdb.hpp>
 #include <tokyooo/list.hpp>
 #include <tokyooo/query.hpp>
 
@@ -28,5 +29,6 @@ int main(int argc, char * argv[])
   for (int i = 0; keys.get(x, i); ++i )
     std::cout << x << std::endl;
 
+  hdb h("hdb_test");
 
 }
