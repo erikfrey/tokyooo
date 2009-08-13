@@ -56,7 +56,7 @@ public:
     const void * p = tclistval( list_, index, &size );
     if (p == NULL)
       return false;
-    ser::assign(value, p);
+    ser::assign(value, p, size);
     return true;
   }
 
@@ -83,7 +83,7 @@ public:
     const void * p = tclistpop( list_, &size );
     if (p == NULL)
       return false;
-    ser::assign(value, p);
+    ser::assign(value, p, size);
     std::free(p);
     return true;
   }
@@ -111,7 +111,7 @@ public:
     void * p = tclistshift( list_, &size );
     if (p == NULL)
       return false;
-    ser::assign(value, p);
+    ser::assign(value, p, size);
     std::free(p);
     return true;
   }
@@ -139,7 +139,7 @@ public:
     const void * p = tclistremove( list_, index, &size );
     if (p == NULL)
       return false;
-    ser::assign(value, p);
+    ser::assign(value, p, size);
     std::free(p);
     return true;
   }

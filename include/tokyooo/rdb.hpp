@@ -100,7 +100,7 @@ public:
     void * p = tcrdbget( rdb_, ser::cptr(key), ser::len(key), &size );
     if (p == NULL)
       return false;
-    ser::assign(value, p);
+    ser::assign(value, p, size);
     std::free(p);
     return true;
   }
@@ -144,7 +144,7 @@ public:
     void * p = tcrdbext( rdb_, name.c_str(), options, ser::cptr(key), ser::len(key), ser::cptr(value),
         ser::len(value), &size );
     p || err::go(rdb_);
-    ser::assign(value, p);
+    ser::assign(value, p, size);
     std::free(p);
   }
 

@@ -1,6 +1,8 @@
 #ifndef __TOKYOPP_UTIL_HPP__
 #define __TOKYOPP_UTIL_HPP__
 
+#include <vector>
+
 #include <tcrdb.h>
 #include <tchdb.h>
 #include <string>
@@ -41,16 +43,21 @@ struct err
   }
 };
 
+// TODO: a more formal approach here, with probably default support for stream operator, and optional boost::archive
 struct ser
 {
   static const void * cptr(const std::string & value) { return value.c_str(); }
   static const void * cptr(const char * value) { return value; }
+  template<class T> static const void * cptr( const std::vector<T> & value ) { return &value[0]; }
   template<class T> static const void * cptr(const T & value) { return &value; }
   static int len(const std::string & value) { return value.size(); }
   static int len(const char * value) { return strlen(value); }
+  template<class T> static int len(const std::vector<T> & value) { return value.size() * sizeof(T); }
   template<class T> static int len(const T & value) { return sizeof(T); }
-  static void assign(std::string & value, const void * p) { value = reinterpret_cast<const char *>(p); }
-  template<class T> static void assign(T & value, const void * p) { value = *reinterpret_cast<const T*>(p); }
+  static void assign(std::string & value, const void * p, int len) { value = reinterpret_cast<const char *>(p); }
+  template<class T> static void assign(std::vector<T> & value, const void * p, int len)
+  { value.assign(*reinterpret_cast<const T*>(p), *reinterpret_cast<const T*>(p + len)); }
+  template<class T> static void assign(T & value, const void * p, int len) { value = *reinterpret_cast<const T*>(p); }
 };
 
 typedef boost::uint64_t size_type;

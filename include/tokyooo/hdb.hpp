@@ -144,7 +144,7 @@ public:
     void * p = tchdbget( hdb_, ser::cptr(key), ser::len(key), &size );
     if (p == NULL)
       return false;
-    ser::assign(value, p);
+    ser::assign(value, p, size);
     std::free(p);
     return true;
   }
