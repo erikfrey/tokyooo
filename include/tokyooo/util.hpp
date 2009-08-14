@@ -56,7 +56,7 @@ struct ser
   template<class T> static int len(const T & value) { return sizeof(T); }
   static void assign(std::string & value, const void * p, int len) { value = reinterpret_cast<const char *>(p); }
   template<class T> static void assign(std::vector<T> & value, const void * p, int len)
-  { value.assign(*reinterpret_cast<const T*>(p), *reinterpret_cast<const T*>(p + len)); }
+  { value.assign(reinterpret_cast<const T*>(p), reinterpret_cast<const T*>(reinterpret_cast<const char *>(p) + len)); }
   template<class T> static void assign(T & value, const void * p, int len) { value = *reinterpret_cast<const T*>(p); }
 };
 
